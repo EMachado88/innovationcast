@@ -2,9 +2,32 @@ import { useState } from "react"
 
 export default function NewComment() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
 
   const handleToggleModal = () => {
     setModalOpen(!modalOpen)
+  }
+
+  const handleSubmit = async () => {
+    if (!name || !message) {
+      return
+    }
+
+    await fetch('/api/posts', {
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify({
+        userName: name,
+        comment: message,
+        userProfileImgUrl: 'https://i.pravatar.cc/150',
+        validated: false
+      })
+    })
+
+    setName('')
+    setMessage('')
+    handleToggleModal()
   }
 
   return (
@@ -26,10 +49,22 @@ export default function NewComment() {
             <p className="modal-card-title">New comment</p>
           </header>
           <section className="modal-card-body">
-          <textarea className="textarea" placeholder="Enter your comment..."></textarea>
+            <input
+              className="input mb-3"
+              type="text"
+              placeholder="Enter your name..."
+              onChange={(event) => setName(event.target.value)}
+              value={name}
+            />
+            <textarea
+              className="textarea"
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="Enter your comment..."
+              value={message}
+            />
           </section>
           <footer className="modal-card-foot">
-            <button className="button is-success">Submit</button>
+            <button className="button is-success" onClick={handleSubmit}>Submit</button>
             <button onClick={handleToggleModal} className="button">Cancel</button>
           </footer>
         </div>
