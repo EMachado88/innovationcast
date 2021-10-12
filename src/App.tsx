@@ -52,7 +52,11 @@ export default function App() {
 
       <div className="columns">
         <div className="column is-three-quarters">
-          {posts.map((post: any) => (
+          {posts.map((post: any) => {
+            const differenceInTime = (new Date()).getTime() - (new Date(post.postedOn).getTime())
+            const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24))
+
+            return (
             <div key={post.id}>
               <div className="columns">
                 <div className="column is-1">
@@ -61,13 +65,17 @@ export default function App() {
                   </figure>
                 </div>
                 <div className="column">
-                  <strong>{post.userName}</strong>
+                  <div className="columns">
+                    <strong className="column is-8">{post.userName}</strong>
+                    <span className="column">{differenceInDays} {differenceInDays === 1 ? 'day' : 'days'} ago</span>
+                  </div>
                   <p>{post.comment}</p>
+                  {/* <p>{JSON.stringify(post)}</p> */}
                 </div>
               </div>
               <hr />
             </div>
-          ))}
+          )})}
 
           <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
