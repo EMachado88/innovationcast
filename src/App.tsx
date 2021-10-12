@@ -4,7 +4,8 @@ import "./styles.css"
 
 import { useEffect, useState } from "react"
 
-import Navigation from "./Navigation"
+import Navigation from './Navigation'
+import NewComment from './NewComment'
 
 function useQueryParams(): any {
   const params = new URLSearchParams(
@@ -22,12 +23,8 @@ export default function App() {
   const [posts, setPosts] = useState([])
   const [nextPage, setNextPage] = useState(0)
   const [prevPage, setPrevPage] = useState(0)
-  const [modalOpen, setModalOpen] = useState(false)
-  const { page } = useQueryParams()
 
-  const handleToggleModal = () => {
-    setModalOpen(!modalOpen)
-  }
+  const { page } = useQueryParams()
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -75,35 +72,7 @@ export default function App() {
           <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
 
-        <div className="column">
-          <button onClick={handleToggleModal} className="button is-info is-light mb-4">
-            <span className="icon-text">
-              <span className="icon mr-2">
-                <i className="fas fa-regular fa-envelope"></i>
-              </span>
-            </span>
-            <span>Comment</span>
-          </button>
-
-          <div className={`modal${modalOpen ? ' is-active' : ''}`}>
-            <div className="modal-background" onClick={handleToggleModal}></div>
-
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <p className="modal-card-title">New comment</p>
-              </header>
-              <section className="modal-card-body">
-              <textarea className="textarea" placeholder="Enter your comment..."></textarea>
-              </section>
-              <footer className="modal-card-foot">
-                <button className="button is-success">Submit</button>
-                <button onClick={handleToggleModal} className="button">Cancel</button>
-              </footer>
-            </div>
-
-            <button onClick={handleToggleModal} className="modal-close is-large" aria-label="close"></button>
-          </div>
-        </div>
+        <NewComment />
       </div>
     </div>
   )
