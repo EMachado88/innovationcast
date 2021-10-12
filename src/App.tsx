@@ -27,7 +27,6 @@ export default function App() {
   const { page } = useQueryParams()
 
   const fetchMyAPI = async () => {
-    console.log('passei')
     const response = await fetch(`/api/posts?page=${page || 1}`)
     const json = await response.json()
     setPosts(json.posts)

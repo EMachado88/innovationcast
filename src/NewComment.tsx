@@ -7,6 +7,11 @@ export default function NewComment(props: any) {
 
   const { fetchMyAPI } = props
 
+  const resetForm = () => {
+    setName('')
+    setMessage('')
+  }
+
   const handleToggleModal = () => {
     setModalOpen(!modalOpen)
   }
@@ -28,8 +33,7 @@ export default function NewComment(props: any) {
     })
 
     fetchMyAPI()
-    setName('')
-    setMessage('')
+    resetForm()
     handleToggleModal()
   }
 
