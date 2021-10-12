@@ -2,23 +2,26 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bulma/css/bulma.min.css';
 import "./styles.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     async function fetchMyAPI() {
-      let response = await fetch("/api/posts");
-      response = await response.json();
-
-
+      const response = await fetch(`/api/posts`);
+      const json = await response.json()
+      console.log(json)
+      setPosts(json.posts)
     }
 
     fetchMyAPI();
   }, []);
+
   return (
     <div className="App">
       <h1 className="title">Comments</h1>
-      <button className="button is-info is-light mb-4">
+      <button className="button is-info is-light mb-5">
         <span className="icon-text">
           <span className="icon mr-2">
             <i className="fas fa-filter"></i>
@@ -29,20 +32,23 @@ export default function App() {
 
       <div className="columns">
         <div className="column is-three-quarters">
-          <div className="columns">
-            <div className="column is-1">
-              <figure className="image is-48x48">
-                <img className="is-rounded" src="https://bulma.io/images/placeholders/48x48.png" />
-              </figure>
+          {posts.map((post: any) => (
+            <div key={post.id}>
+              <div className="columns">
+                <div className="column is-1">
+                  <figure className="image is-48x48">
+                    <img className="is-rounded" src={post.userProfileImgUrl} />
+                  </figure>
+                </div>
+                <div className="column">
+                  <strong>{post.userName}</strong>
+                  <p>{post.comment}</p>
+                  {/* <p>{JSON.stringify(post)}</p> */}
+                </div>
+              </div>
+              <hr />
             </div>
-            <div className="column">
-              <strong>Comment</strong>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat repellat vitae est modi, quo consequuntur dolores voluptate rerum accusantium illo, ratione deleniti officia cum amet doloremque, id facere distinctio recusandae!</p>
-            </div>
-          </div>
-          <hr />
-          <hr />
-          <hr />
+          ))}
         </div>
 
         <div className="column">
