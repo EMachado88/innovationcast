@@ -4,14 +4,26 @@ import "./styles.css";
 
 import { useEffect, useState } from "react";
 
+function useQueryParams(): any {
+  const params = new URLSearchParams(
+    window ? window.location.search : {}
+  );
+
+  return new Proxy(params, {
+      get(target, prop: string) {
+          return target.get(prop)
+      },
+  });
+}
+
 export default function App() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const response = await fetch(`/api/posts`);
+      const { page } = useQueryParams();
+      const response = await fetch(`/api/posts?page=${page || 1}`);
       const json = await response.json()
-      console.log(json)
       setPosts(json.posts)
     }
 
