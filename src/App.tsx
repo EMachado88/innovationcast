@@ -2,7 +2,9 @@ import '@fortawesome/fontawesome-free/css/all.min.css'
 import 'bulma/css/bulma.min.css'
 import "./styles.css"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+
+import Navigation from "./Navigation"
 
 function useQueryParams(): any {
   const params = new URLSearchParams(
@@ -18,14 +20,18 @@ function useQueryParams(): any {
 
 export default function App() {
   const [posts, setPosts] = useState([])
+  const [nextPage, setNextPage] = useState(0)
+  const [prevPage, setPrevPage] = useState(0)
+  const { page } = useQueryParams()
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const { page } = useQueryParams()
       const response = await fetch(`/api/posts?page=${page || 1}`)
       const json = await response.json()
       console.log(json)
       setPosts(json.posts)
+      setPrevPage(json.prev_page)
+      setNextPage(json.next_page)
     }
 
     fetchMyAPI()
@@ -56,12 +62,13 @@ export default function App() {
                 <div className="column">
                   <strong>{post.userName}</strong>
                   <p>{post.comment}</p>
-                  {/* <p>{JSON.stringify(post)}</p> */}
                 </div>
               </div>
               <hr />
             </div>
           ))}
+
+          <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
 
         <div className="column">
