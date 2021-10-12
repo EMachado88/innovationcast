@@ -1,6 +1,6 @@
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bulma/css/bulma.min.css';
-import "./styles.css";
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import 'bulma/css/bulma.min.css'
+import "./styles.css"
 
 import { useEffect, useState } from "react";
 
@@ -17,18 +17,19 @@ function useQueryParams(): any {
 }
 
 export default function App() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([])
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const { page } = useQueryParams();
-      const response = await fetch(`/api/posts?page=${page || 1}`);
+      const { page } = useQueryParams()
+      const response = await fetch(`/api/posts?page=${page || 1}`)
       const json = await response.json()
+      console.log(json)
       setPosts(json.posts)
     }
 
-    fetchMyAPI();
-  }, []);
+    fetchMyAPI()
+  }, [])
 
   return (
     <div className="App">
@@ -75,5 +76,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }
