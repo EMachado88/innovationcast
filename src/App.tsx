@@ -26,15 +26,16 @@ export default function App() {
 
   const { page } = useQueryParams()
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      const response = await fetch(`/api/posts?page=${page || 1}`)
-      const json = await response.json()
-      setPosts(json.posts)
-      setPrevPage(json.prev_page)
-      setNextPage(json.next_page)
-    }
+  const fetchMyAPI = async () => {
+    console.log('passei')
+    const response = await fetch(`/api/posts?page=${page || 1}`)
+    const json = await response.json()
+    setPosts(json.posts)
+    setPrevPage(json.prev_page)
+    setNextPage(json.next_page)
+  }
 
+  useEffect(() => {
     fetchMyAPI()
   }, [])
 
@@ -80,7 +81,7 @@ export default function App() {
           <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
 
-        <NewComment />
+        <NewComment fetchMyAPI={fetchMyAPI} />
       </div>
     </div>
   )

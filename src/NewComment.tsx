@@ -1,9 +1,11 @@
 import { useState } from "react"
 
-export default function NewComment() {
+export default function NewComment(props: any) {
   const [modalOpen, setModalOpen] = useState(false)
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
+
+  const { fetchMyAPI } = props
 
   const handleToggleModal = () => {
     setModalOpen(!modalOpen)
@@ -25,6 +27,7 @@ export default function NewComment() {
       })
     })
 
+    fetchMyAPI()
     setName('')
     setMessage('')
     handleToggleModal()
