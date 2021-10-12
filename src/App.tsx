@@ -23,6 +23,7 @@ export default function App() {
   const [posts, setPosts] = useState([])
   const [nextPage, setNextPage] = useState(0)
   const [prevPage, setPrevPage] = useState(0)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const { page } = useQueryParams()
 
@@ -34,21 +35,49 @@ export default function App() {
     setNextPage(json.next_page)
   }
 
+  const handleFilterClick = () => {
+    setIsFilterOpen(!isFilterOpen)
+  }
+
   useEffect(() => {
     fetchMyAPI()
+
+    isFilterOpen && setPosts(posts.filter((post: any) => post.validated))
   }, [])
 
   return (
     <div className="App">
       <h1 className="title">Comments</h1>
-      <button className="button is-info is-light mb-5">
-        <span className="icon-text">
-          <span className="icon mr-2">
-            <i className="fas fa-filter"></i>
-          </span>
-        </span>
-        <span>Filter</span>
-      </button>
+
+      <div className={`dropdown${isFilterOpen ? ' is-active' : ''}`}>
+        <div className="dropdown-trigger">
+          <button
+            className="button is-info is-light mb-5"
+            onClick={handleFilterClick}
+          >
+            <span className="icon-text">
+              <span className="icon mr-2">
+                <i className="fas fa-filter"></i>
+              </span>
+            </span>
+            <span>Filter</span>
+          </button>
+        </div>
+
+        <div className="dropdown-menu" id="dropdown-menu2" role="menu">
+          <div className="dropdown-content">
+            <div className="dropdown-item">
+              <p>You can insert <strong>any type of content</strong> within the dropdown menu.</p>
+            </div>
+            <div className="dropdown-item">
+              <p>You simply need to use a <code>&lt;div&gt;</code> instead.</p>
+            </div>
+            <a href="#" className="dropdown-item">
+              This is a link
+            </a>
+          </div>
+        </div>
+      </div>
 
       <div className="columns">
         <div className="column is-three-quarters">
