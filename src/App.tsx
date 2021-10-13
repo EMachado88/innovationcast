@@ -24,6 +24,7 @@ export default function App() {
   const [nextPage, setNextPage] = useState(0)
   const [prevPage, setPrevPage] = useState(0)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isValidated, setIsValidated] = useState(false)
 
   const { page } = useQueryParams()
 
@@ -39,10 +40,21 @@ export default function App() {
     setIsFilterOpen(!isFilterOpen)
   }
 
+  const handleChangeVisibility = async () => {
+    setIsValidated(!isValidated)
+
+    if (!isValidated) {
+      const filtered = posts.filter((post: any) => post.validated)
+      setPosts(filtered)
+    } else {
+      await fetchMyAPI()
+    }
+  }
+
   useEffect(() => {
     fetchMyAPI()
 
-    isFilterOpen && setPosts(posts.filter((post: any) => post.validated))
+    isValidated && setPosts(posts.filter((post: any) => post.validated))
   }, [])
 
   return (
@@ -67,14 +79,16 @@ export default function App() {
         <div className="dropdown-menu" id="dropdown-menu2" role="menu">
           <div className="dropdown-content">
             <div className="dropdown-item">
-              <p>You can insert <strong>any type of content</strong> within the dropdown menu.</p>
+            <label className="checkbox">
+              <input
+                className="mr-3"
+                onClick={handleChangeVisibility}
+                type="checkbox"
+                value={`${isValidated}`}
+              />
+              Validated
+            </label>
             </div>
-            <div className="dropdown-item">
-              <p>You simply need to use a <code>&lt;div&gt;</code> instead.</p>
-            </div>
-            <a href="#" className="dropdown-item">
-              This is a link
-            </a>
           </div>
         </div>
       </div>
@@ -86,25 +100,24 @@ export default function App() {
             const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24))
 
             return (
-            <div key={post.id}>
-              <div className="columns">
-                <div className="column is-1">
-                  <figure className="image is-48x48">
-                    <img className="is-rounded" src={post.userProfileImgUrl} />
-                  </figure>
-                </div>
-                <div className="column">
-                  <div className="columns">
-                    <strong className="column is-8">{post.userName}</strong>
-                    <span className="column">{differenceInDays} {differenceInDays === 1 ? 'day' : 'days'} ago</span>
+              <div key={post.id}>
+                <div className="columns">
+                  <div className="column is-1">
+                    <figure className="image is-48x48">
+                      <img className="is-rounded" src={post.userProfileImgUrl} />
+                    </figure>
                   </div>
-                  <p>{post.comment}</p>
-                  {/* <p>{JSON.stringify(post)}</p> */}
+                  <div className="column">
+                    <div className="columns">
+                      <strong className="column is-8">{post.userName}</strong>
+                      <span className="column">{differenceInDays} {differenceInDays === 1 ? 'day' : 'days'} ago</span>
+                    </div>
+                    <p>{post.comment}</p>
+                  </div>
                 </div>
+                <hr />
               </div>
-              <hr />
-            </div>
-          )})}
+            )})}
 
           <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
