@@ -14,7 +14,7 @@ export default function Navigation(props: any) {
       )}
 
       {nextPage && (
-        <a href={`/?page=${parseInt(page) + 1}`} className="button">
+        <a href={`/?page=${parseInt(page || 1) + 1}`} className="button">
           <span className="icon-text">
             <span className="icon">
               <i className="fas fa-chevron-right"></i>
