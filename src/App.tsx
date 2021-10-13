@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 
 import Navigation from './Navigation'
 import NewComment from './NewComment'
+import Post from './Post'
 
 function useQueryParams(): any {
   const params = new URLSearchParams(
@@ -114,10 +115,12 @@ export default function App() {
                     </div>
                     <p>{post.comment}</p>
                   </div>
-                </div>
-                <hr />
-              </div>
-            )})}
+
+      <div className="columns">
+        <div className="column is-three-quarters">
+          {posts.map((post: any) => (
+            <Post key={post.id} post={post} />
+          ))}
 
           <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
         </div>
