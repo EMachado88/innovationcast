@@ -4,6 +4,7 @@ import "./styles.css"
 
 import { useEffect, useState } from "react"
 
+import Filter from './Filter'
 import Navigation from './Navigation'
 import NewComment from './NewComment'
 import Post from './Post'
@@ -24,7 +25,6 @@ export default function App() {
   const [posts, setPosts] = useState([])
   const [nextPage, setNextPage] = useState(0)
   const [prevPage, setPrevPage] = useState(0)
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isValidated, setIsValidated] = useState(false)
   const [totalPages, setTotalPages] = useState('...')
 
@@ -39,21 +39,6 @@ export default function App() {
     setTotalPages(String(json.total / json.per_page))
   }
 
-  const handleFilterClick = () => {
-    setIsFilterOpen(!isFilterOpen)
-  }
-
-  const handleChangeVisibility = async () => {
-    setIsValidated(!isValidated)
-
-    if (!isValidated) {
-      const filtered = posts.filter((post: any) => post.validated)
-      setPosts(filtered)
-    } else {
-      await fetchMyAPI()
-    }
-  }
-
   useEffect(() => {
     fetchMyAPI()
 
@@ -65,37 +50,7 @@ export default function App() {
       <h1 className="title">Comments</h1>
 
       <div className="columns">
-        <div className={`column dropdown${isFilterOpen ? ' is-active' : ''}`}>
-          <div className="dropdown-trigger">
-            <button
-              className="button is-info is-light mb-5"
-              onClick={handleFilterClick}
-            >
-              <span className="icon-text">
-                <span className="icon mr-2">
-                  <i className="fas fa-filter"></i>
-                </span>
-              </span>
-              <span>Filter</span>
-            </button>
-          </div>
-
-          <div className="dropdown-menu" id="dropdown-menu2" role="menu">
-            <div className="dropdown-content">
-              <div className="dropdown-item">
-              <label className="checkbox">
-                <input
-                  className="mr-3"
-                  onClick={handleChangeVisibility}
-                  type="checkbox"
-                  value={`${isValidated}`}
-                />
-                Validated
-              </label>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Filter posts={posts} setPosts={setPosts} setIsValidated={setIsValidated} fetchMyAPI={fetchMyAPI} isValidated={isValidated} />
 
         <div className="column">
           Page {page} of {totalPages} pages
