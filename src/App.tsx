@@ -28,7 +28,7 @@ export default function App() {
   const [isValidated, setIsValidated] = useState(false)
   const [totalPages, setTotalPages] = useState('...')
 
-  const { page } = useQueryParams()
+  let { page } = useQueryParams()
 
   const fetchMyAPI = async () => {
     const response = await fetch(`/api/posts?page=${page || 1}`)
@@ -38,6 +38,12 @@ export default function App() {
     setNextPage(json.next_page)
     setTotalPages(String(json.total / json.per_page))
   }
+
+  // const handlePageChange = (pageNumber: Number) => {
+  //   page = '' + pageNumber
+  //   window.history.pushState({ page }, page, `?page=${page}`)
+  //   fetchMyAPI()
+  // }
 
   useEffect(() => {
     fetchMyAPI()
@@ -63,7 +69,7 @@ export default function App() {
             <Post key={post.id} post={post} />
           ))}
 
-          <Navigation page={page} prevPage={prevPage} nextPage={nextPage} />
+          <Navigation page={page} prevPage={prevPage} nextPage={nextPage} /* handlePageChange={handlePageChange} */ />
         </div>
 
         <NewComment fetchMyAPI={fetchMyAPI} />
