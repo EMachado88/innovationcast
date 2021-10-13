@@ -14,9 +14,9 @@ function useQueryParams(): any {
   );
 
   return new Proxy(params, {
-      get(target, prop: string) {
-          return target.get(prop)
-      },
+    get(target, prop: string) {
+      return target.get(prop)
+    },
   });
 }
 
@@ -26,6 +26,7 @@ export default function App() {
   const [prevPage, setPrevPage] = useState(0)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isValidated, setIsValidated] = useState(false)
+  const [totalPages, setTotalPages] = useState('...')
 
   const { page } = useQueryParams()
 
@@ -35,6 +36,7 @@ export default function App() {
     setPosts(json.posts)
     setPrevPage(json.prev_page)
     setNextPage(json.next_page)
+    setTotalPages(String(json.total / json.per_page))
   }
 
   const handleFilterClick = () => {
@@ -62,59 +64,43 @@ export default function App() {
     <div className="App">
       <h1 className="title">Comments</h1>
 
-      <div className={`dropdown${isFilterOpen ? ' is-active' : ''}`}>
-        <div className="dropdown-trigger">
-          <button
-            className="button is-info is-light mb-5"
-            onClick={handleFilterClick}
-          >
-            <span className="icon-text">
-              <span className="icon mr-2">
-                <i className="fas fa-filter"></i>
+      <div className="columns">
+        <div className={`column dropdown${isFilterOpen ? ' is-active' : ''}`}>
+          <div className="dropdown-trigger">
+            <button
+              className="button is-info is-light mb-5"
+              onClick={handleFilterClick}
+            >
+              <span className="icon-text">
+                <span className="icon mr-2">
+                  <i className="fas fa-filter"></i>
+                </span>
               </span>
-            </span>
-            <span>Filter</span>
-          </button>
-        </div>
+              <span>Filter</span>
+            </button>
+          </div>
 
-        <div className="dropdown-menu" id="dropdown-menu2" role="menu">
-          <div className="dropdown-content">
-            <div className="dropdown-item">
-            <label className="checkbox">
-              <input
-                className="mr-3"
-                onClick={handleChangeVisibility}
-                type="checkbox"
-                value={`${isValidated}`}
-              />
-              Validated
-            </label>
+          <div className="dropdown-menu" id="dropdown-menu2" role="menu">
+            <div className="dropdown-content">
+              <div className="dropdown-item">
+              <label className="checkbox">
+                <input
+                  className="mr-3"
+                  onClick={handleChangeVisibility}
+                  type="checkbox"
+                  value={`${isValidated}`}
+                />
+                Validated
+              </label>
+              </div>
             </div>
           </div>
         </div>
+
+        <div className="column">
+          Page {page} of {totalPages} pages
+        </div>
       </div>
-
-      <div className="columns">
-        <div className="column is-three-quarters">
-          {posts.map((post: any) => {
-            const differenceInTime = (new Date()).getTime() - (new Date(post.postedOn).getTime())
-            const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24))
-
-            return (
-              <div key={post.id}>
-                <div className="columns">
-                  <div className="column is-1">
-                    <figure className="image is-48x48">
-                      <img className="is-rounded" src={post.userProfileImgUrl} />
-                    </figure>
-                  </div>
-                  <div className="column">
-                    <div className="columns">
-                      <strong className="column is-8">{post.userName}</strong>
-                      <span className="column">{differenceInDays} {differenceInDays === 1 ? 'day' : 'days'} ago</span>
-                    </div>
-                    <p>{post.comment}</p>
-                  </div>
 
       <div className="columns">
         <div className="column is-three-quarters">
