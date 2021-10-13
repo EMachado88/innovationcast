@@ -59,7 +59,7 @@ export default function App() {
         <Filter posts={posts} setPosts={setPosts} setIsValidated={setIsValidated} fetchMyAPI={fetchMyAPI} isValidated={isValidated} />
 
         <div className="column">
-          Page {page} of {totalPages} pages
+          Page {page || 1} of {totalPages} pages
         </div>
       </div>
 
